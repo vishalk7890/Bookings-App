@@ -2,10 +2,13 @@ package handlers
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"strings"
 	"testing"
 
 	"github.com/tsawler/bookings-app/internal/models"
@@ -111,7 +114,52 @@ func TestRepository_Reservation(t *testing.T) {
 
 }
 
+func TestPostReservation(t *testing.T) {
+	reqBody := "start_date=2020-01-02"
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "end_date=2020-12-2")
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "first_name=2020-12-2")
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "last_name=2020-12-2")
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "email=2020-12-2")
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "phone=2020-12-2")
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "room_id=2020-12-2")
 
+	req, _ := http.NewRequest("POST", "/make-reservation", strings.NewReader(reqBody))
 
+	ctx := GetCtx(req)
+	req = req.WithContext(ctx)
 
+	req.Header.Set("Content-type", "application/www.form-url-encoded")
 
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(Repo.PostReservation)
+	handler.ServeHTTP(rr, req)
+	if rr.Code != http.StatusOK {
+		t.Errorf("Reservation handler returned wrong response code %d and wanted %d", rr.Code, http.StatusOK)
+	}
+
+}
+
+func TestRepository_AvailablityJSON(t *testing.T) {
+	reqBody := "start=2020-12-01"
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "end_date=2020-12-2")
+	reqBody = fmt.Sprintf("%s&%s", reqBody, "room_id=2020-12-2")
+	req, _ := http.NewRequest("GET", "/search-availability", strings.NewReader(reqBody))
+	ctx := GetCtx(req)
+	req = req.WithContext(ctx)
+
+	req.Header.Set("Content-type", "application/www.form-url-encoded")
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(Repo.AvailabilityJSON)
+	handler.ServeHTTP(rr, req)
+	var j jsonResponse
+	err := json.Unmarshal([]byte(rr.Body.String()), &j)
+	if err!= nil {
+		t.Error("failed to parse json")
+	}
+	
+
+	if rr.Code != http.StatusOK {
+		t.Errorf("Reservation handler returned wrong response code %d and wanted %d", rr.Code, http.StatusOK)
+	}
+
+}

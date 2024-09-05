@@ -23,7 +23,6 @@ func (m *testDBRepo) SearchAvailabilityByDatesByRoomID(start, end time.Time, roo
 	return true, nil
 }
 
-
 func (m *testDBRepo) SearchAvailabilityForAllRooms(start, end time.Time) ([]models.Room, error) {
 
 	var rooms []models.Room
@@ -36,4 +35,16 @@ func (m *testDBRepo) GetRoomById(id int) (models.Room, error) {
 	var room models.Room
 
 	return room, nil
+}
+func (m *testDBRepo) Authenticate(email, testPassword string) (int, string, error) {
+	return 1, "", nil
+}
+
+func (m *testDBRepo) UpdateUser(u models.User) error {
+	return nil
+}
+
+func (m *testDBRepo) GetUserByID(id int) (models.User, error) {
+	var u models.User
+	return u, nil
 }

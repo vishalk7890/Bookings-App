@@ -32,7 +32,13 @@ func main() {
 		log.Fatal(err)
 	}
 	defer db.SQL.Close()
+	defer close(app.MailChan)
+	//ListenForMail()
 
+	if err != nil {
+		log.Println("err")
+
+	}
 	fmt.Println(fmt.Sprintf("Staring application on port %s", portNumber))
 
 	srv := &http.Server{
@@ -52,6 +58,8 @@ func run() (*driver.DB, error) {
 	gob.Register(models.User{})
 	gob.Register(models.Restriction{})
 	gob.Register(models.Room{})
+	mailchan := make(chan models.MailData)
+	app.MailChan = mailchan
 
 	// change this to true when in production
 	app.InProduction = false
