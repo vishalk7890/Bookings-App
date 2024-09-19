@@ -48,3 +48,8 @@ func (m *testDBRepo) GetUserByID(id int) (models.User, error) {
 	var u models.User
 	return u, nil
 }
+
+func (m *testDBRepo) AllReservations() ([]models.Reservation, error) {
+	var res []models.Reservation
+	return res, nil
+}

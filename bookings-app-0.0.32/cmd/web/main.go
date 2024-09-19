@@ -3,7 +3,6 @@ package main
 import (
 	//"database/sql/driver"
 	"encoding/gob"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -39,7 +38,7 @@ func main() {
 		log.Println("err")
 
 	}
-	fmt.Println(fmt.Sprintf("Staring application on port %s", portNumber))
+	//fmt.Println(fmt.Sprintf("Staring application on port %s", portNumber))
 
 	srv := &http.Server{
 		Addr:    portNumber,
